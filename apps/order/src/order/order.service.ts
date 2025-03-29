@@ -127,6 +127,7 @@ export class OrderService {
       const resp = await lastValueFrom(this.paymentService.send({ cmd: 'make_payment' }, {
         ...payment,
         userEmail,
+        orderId,
       }));
 
       if (resp.status === 'error') {
@@ -154,5 +155,10 @@ export class OrderService {
 
       throw e;
     }
+
+  }
+
+  changeOrderStatus(orderId: string, status: OrderStatus) {
+    return this.orderModel.findByIdAndUpdate(orderId, { status });
   }
 }
