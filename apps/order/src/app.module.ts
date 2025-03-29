@@ -1,10 +1,10 @@
+import { USER_SERVICE } from "@app/common";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { MongooseModule } from "@nestjs/mongoose";
 import * as Joi from 'joi';
 import { OrderModule } from "./order/order.module";
-
 
 @Module({
     imports: [
@@ -26,12 +26,12 @@ import { OrderModule } from "./order/order.module";
         ClientsModule.registerAsync({
             clients: [
                 {
-                    name: 'USER_SERVICE',
+                    name: USER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
                         transport: Transport.TCP,
                         options: {
-                            host: 'user', // User MS의 호스트
-                            port: 3001,        // User MS의 포트
+                            host: configService.getOrThrow<string>('USER_HOST'),
+                            port: configService.getOrThrow<number>('USER_TCP_PORT'),
                         }
                     }),
                     inject: [ConfigService]
