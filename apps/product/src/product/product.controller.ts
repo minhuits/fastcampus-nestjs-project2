@@ -8,7 +8,10 @@ import { ProductService } from './product.service';
 export class ProductController {
   constructor(private readonly productService: ProductService) { }
 
-  @Post('sample')
+  // @Post('sample')
+  @MessagePattern({ cmd: 'create_sample' })
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(RpcInterceptor)
   createSamples() {
     return this.productService.createSamples();
   }
