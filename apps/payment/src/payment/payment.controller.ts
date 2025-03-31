@@ -4,6 +4,7 @@ import { PaymentMethod } from './entity/payment.entity';
 import { PaymentService } from './payment.service';
 
 @Controller()
+@PaymentMicroservice.PaymentServiceControllerMethods()
 export class PaymentController implements PaymentMicroservice.PaymentServiceController {
   constructor(private readonly paymentService: PaymentService) { }
 

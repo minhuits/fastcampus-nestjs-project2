@@ -3,6 +3,7 @@ import { BadRequestException, Controller } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 
 @Controller()
+@NotificationMicroservice.NotificationServiceControllerMethods()
 export class NotificationController implements NotificationMicroservice.NotificationServiceController {
   constructor(private readonly notificationService: NotificationService) { }
 

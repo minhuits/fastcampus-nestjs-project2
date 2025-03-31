@@ -1,10 +1,10 @@
 import { ProductMicroservice } from '@app/common';
 import { Controller } from '@nestjs/common';
-import { Payload } from '@nestjs/microservices';
 import { GetProductsInfo } from './dto/get.products.info.dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
+@ProductMicroservice.ProductServiceControllerMethods()
 export class ProductController implements ProductMicroservice.ProductServiceController {
   constructor(private readonly productService: ProductService) { }
 

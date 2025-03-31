@@ -6,6 +6,7 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create.order.dto';
 
 @Controller('order')
+@OrderMicroservice.OrderServiceControllerMethods()
 export class OrderController implements OrderMicroservice.OrderServiceController {
   constructor(private readonly orderService: OrderService) { }
 
