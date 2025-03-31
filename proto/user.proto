@@ -32,16 +32,16 @@ message RegisterUserResponse {
 }
 
 message LoginUserRequest {
-  string token = 1;
+    string token = 1;
 }
 
 message LoginUserResponse {
-  string refreshToken = 1;
-  string accessToken = 2;
+    string refreshToken = 1;
+    string accessToken = 2;
 }
 
 service UserService {
-  rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+    rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
 }
 
 message GetUserInfoRequest {

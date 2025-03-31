@@ -10,7 +10,7 @@ export class AuthController implements UserMicroservice.AuthServiceController {
     return this.authService.parseBearerToken(payload.token, false);
   }
 
-  registerUser(registerDto: UserMicroservice.RegisterUserRequest) {
+  registerUser(registerDto: UserMicroservice.RegisterUserRequest): any {
     const { token } = registerDto;
 
     if (token === null) {
