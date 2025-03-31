@@ -6,14 +6,14 @@ import { AuthService } from './auth.service';
 export class AuthController implements UserMicroservice.AuthServiceController {
   constructor(private readonly authService: AuthService) { }
 
-  parseBearerToken(payload: UserMicroservice.ParseBearerTokenRequest) {
-    return this.authService.parseBearerToken(payload.token, false);
+  parseBearerToken(request: UserMicroservice.ParseBearerTokenRequest) {
+    return this.authService.parseBearerToken(request.token, false);
   }
 
-  async registerUser(registerDto: UserMicroservice.RegisterUserRequest) {
-    const { token } = registerDto;
+  async registerUser(request: UserMicroservice.RegisterUserRequest) {
+    const { token } = request;
     
-    const tokenData = await this.authService.register(token, registerDto);
+    const tokenData = await this.authService.register(token, request);
 
     // null 체크 추가
     if (!tokenData) {
@@ -23,8 +23,8 @@ export class AuthController implements UserMicroservice.AuthServiceController {
     return tokenData;
   }
 
-  loginUser(loginDto: UserMicroservice.LoginUserRequest) {
-    const { token } = loginDto;
+  loginUser(request: UserMicroservice.LoginUserRequest) {
+    const { token } = request;
     if (token === null) {
       throw new UnauthorizedException('토큰을 입력해주세요!')
     }

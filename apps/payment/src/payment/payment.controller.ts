@@ -7,10 +7,10 @@ import { PaymentService } from './payment.service';
 export class PaymentController implements PaymentMicroservice.PaymentServiceController {
   constructor(private readonly paymentService: PaymentService) { }
 
-  async makePayment(payload: PaymentMicroservice.MakePaymentRequest) {
+  async makePayment(request: PaymentMicroservice.MakePaymentRequest) {
     const payment = await this.paymentService.makePayment({
-      ...payload,
-      paymentMethod: payload.paymentMethod as PaymentMethod,
+      ...request,
+      paymentMethod: request.paymentMethod as PaymentMethod,
     });
 
     // null 체크 추가

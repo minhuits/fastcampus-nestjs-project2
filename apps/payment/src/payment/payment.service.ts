@@ -30,7 +30,6 @@ export class PaymentService {
 
       await this.updatePaymentStatus(result.id, PaymentStatus.approved);
 
-      /// TODO notification 보내기
       this.sendNotification(payload.orderId, payload.userEmail);
 
       return this.paymentRepository.findOneBy({ id: result.id });

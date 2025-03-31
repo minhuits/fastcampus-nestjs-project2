@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 export class UserController implements UserMicroservice.UserServiceController {
   constructor(private readonly userService: UserService) { }
 
-  getUserInfo(data: UserMicroservice.GetUserInfoRequest) {
-    return this.userService.getUserById(data.userId);
+  getUserInfo(request: UserMicroservice.GetUserInfoRequest) {
+    return this.userService.getUserById(request.userId);
   }
 }

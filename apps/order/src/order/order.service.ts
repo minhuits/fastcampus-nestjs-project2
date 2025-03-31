@@ -51,7 +51,7 @@ export class OrderService {
     await this.processPayment(order._id.toString(), payment, user.email);
 
     /// 7) 결과 반환하기
-    return this.orderModel.findById(order._id);
+    const newOrder =  this.orderModel.findById(order._id);
   }
 
   private async getUserFromToken(userId: string) {
