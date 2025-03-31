@@ -1,12 +1,12 @@
+import { ORDER_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from "@app/common";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ClientsModule, Transport } from "@nestjs/microservices";
+import * as Joi from 'joi';
+import { AuthModule } from './auth/auth.module';
+import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware";
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
-import { AuthModule } from './auth/auth.module';
-import { ClientsModule, Transport } from "@nestjs/microservices";
-import { ORDER_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from "@app/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import * as Joi from 'joi';
-import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware";
 
 @Module({
     imports: [
@@ -26,10 +26,13 @@ import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware
                 {
                     name: USER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.REDIS,
+                        transport: Transport.RMQ,
                         options: {
-                            host: 'redis',
-                            port: 6379,
+                            urls: ['amqp://rabbitmq:5672'],
+                            queue: 'user_queue',
+                            queueOptions: {
+                                durable: false,
+                            }
                         }
                     }),
                     inject: [ConfigService]
@@ -37,10 +40,13 @@ import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware
                 {
                     name: PRODUCT_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.REDIS,
+                        transport: Transport.RMQ,
                         options: {
-                            host: 'redis',
-                            port: 6379,
+                            urls: ['amqp://rabbitmq:5672'],
+                            queue: 'product_queue',
+                            queueOptions: {
+                                durable: false,
+                            }
                         }
                     }),
                     inject: [ConfigService]
@@ -48,10 +54,13 @@ import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware
                 {
                     name: ORDER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.REDIS,
+                        transport: Transport.RMQ,
                         options: {
-                            host: 'redis',
-                            port: 6379,
+                            urls: ['amqp://rabbitmq:5672'],
+                            queue: 'order_queue',
+                            queueOptions: {
+                                durable: false,
+                            }
                         }
                     }),
                     inject: [ConfigService]
