@@ -1,12 +1,12 @@
-import { ORDER_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from "@app/common";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { ClientsModule, Transport } from "@nestjs/microservices";
-import * as Joi from 'joi';
-import { AuthModule } from './auth/auth.module';
-import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware";
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
+import { AuthModule } from './auth/auth.module';
+import { ClientsModule, Transport } from "@nestjs/microservices";
+import { ORDER_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from "@app/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import * as Joi from 'joi';
+import { BearerTokenMiddleware } from "./auth/middleware/bearer.token.middleware";
 
 @Module({
     imports: [
@@ -26,10 +26,10 @@ import { ProductModule } from './product/product.module';
                 {
                     name: USER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('USER_HOST'),
-                            port: configService.getOrThrow<number>('USER_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]
@@ -37,10 +37,10 @@ import { ProductModule } from './product/product.module';
                 {
                     name: PRODUCT_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('PRODUCT_HOST'),
-                            port: configService.getOrThrow<number>('PRODUCT_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]
@@ -48,10 +48,10 @@ import { ProductModule } from './product/product.module';
                 {
                     name: ORDER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('ORDER_HOST'),
-                            port: configService.getOrThrow<number>('ORDER_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]

@@ -12,6 +12,9 @@ import { NotificationModule } from "./notification/notification.module";
             isGlobal: true,
             validationSchema: Joi.object({
                 DB_URL: Joi.string().required(),
+                TCP_PORT: Joi.number().required(),
+                ORDER_HOST: Joi.string().required(),
+                ORDER_TCP_PORT: Joi.string().required(),
             })
         }),
         MongooseModule.forRootAsync({
@@ -25,10 +28,10 @@ import { NotificationModule } from "./notification/notification.module";
                 {
                     name: ORDER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('ORDER_HOST'),
-                            port: configService.getOrThrow<number>('ORDER_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]

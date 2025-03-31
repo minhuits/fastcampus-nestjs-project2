@@ -12,6 +12,7 @@ import { OrderModule } from "./order/order.module";
             isGlobal: true,
             validationSchema: Joi.object({
                 HTTP_PORT: Joi.number().required(),
+                TCP_PORT: Joi.number().required(),
                 USER_HOST: Joi.string().required(),
                 USER_TCP_PORT: Joi.number().required(),
                 DB_URL: Joi.string().required(),
@@ -32,10 +33,10 @@ import { OrderModule } from "./order/order.module";
                 {
                     name: USER_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('USER_HOST'),
-                            port: configService.getOrThrow<number>('USER_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]
@@ -43,10 +44,10 @@ import { OrderModule } from "./order/order.module";
                 {
                     name: PRODUCT_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('PRODUCT_HOST'),
-                            port: configService.getOrThrow<number>('PRODUCT_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]
@@ -54,10 +55,10 @@ import { OrderModule } from "./order/order.module";
                 {
                     name: PAYMENT_SERVICE,
                     useFactory: (configService: ConfigService) => ({
-                        transport: Transport.TCP,
+                        transport: Transport.REDIS,
                         options: {
-                            host: configService.getOrThrow<string>('PAYMENT_HOST'),
-                            port: configService.getOrThrow<number>('PAYMENT_TCP_PORT'),
+                            host: 'redis',
+                            port: 6379,
                         }
                     }),
                     inject: [ConfigService]
