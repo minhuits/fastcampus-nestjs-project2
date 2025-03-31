@@ -20,6 +20,8 @@
     "test:e2e": "jest --config ./apps/fastcampus-nestjs-project2/test/jest-e2e.json"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.13.2",
+    "@grpc/proto-loader": "^0.7.13",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -40,6 +42,7 @@
     "pg": "^8.14.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "ts-proto": "^2.7.0",
     "typeorm": "^0.3.21"
   },
   "devDependencies": {
