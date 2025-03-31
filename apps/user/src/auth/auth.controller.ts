@@ -1,5 +1,5 @@
 import { UserMicroservice } from '@app/common';
-import { Controller, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Controller, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -10,14 +10,17 @@ export class AuthController implements UserMicroservice.AuthServiceController {
     return this.authService.parseBearerToken(payload.token, false);
   }
 
-  registerUser(registerDto: UserMicroservice.RegisterUserRequest): any {
+  async registerUser(registerDto: UserMicroservice.RegisterUserRequest) {
     const { token } = registerDto;
+    
+    const tokenData = await this.authService.register(token, registerDto);
 
-    if (token === null) {
-      throw new UnauthorizedException('토큰을 입력해주세요!');
+    // null 체크 추가
+    if (!tokenData) {
+      throw new BadRequestException('Payment failed');
     }
 
-    return this.authService.register(token, registerDto);
+    return tokenData;
   }
 
   loginUser(loginDto: UserMicroservice.LoginUserRequest) {

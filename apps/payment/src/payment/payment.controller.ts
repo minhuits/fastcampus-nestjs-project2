@@ -1,18 +1,23 @@
-import { RpcInterceptor } from '@app/common/interceptor/rpc.interceptor';
-import { Controller, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { MakePaymentDto } from './dto/make.payment.dto';
+import { PaymentMicroservice } from '@app/common';
+import { BadRequestException, Controller } from '@nestjs/common';
+import { PaymentMethod } from './entity/payment.entity';
 import { PaymentService } from './payment.service';
 
 @Controller()
-export class PaymentController {
+export class PaymentController implements PaymentMicroservice.PaymentServiceController {
   constructor(private readonly paymentService: PaymentService) { }
 
-  @MessagePattern({ cmd: 'make_payment' })
-  @UsePipes(ValidationPipe)
-  @UseInterceptors(RpcInterceptor)
-  makePayment(@Payload() payload: MakePaymentDto) {
-    console.log(payload);
-    return this.paymentService.makePayment(payload);
+  async makePayment(payload: PaymentMicroservice.MakePaymentRequest) {
+    const payment = await this.paymentService.makePayment({
+      ...payload,
+      paymentMethod: payload.paymentMethod as PaymentMethod,
+    });
+
+    // null 체크 추가
+    if (!payment) {
+      throw new BadRequestException('Payment failed');
+    }
+
+    return payment;
   }
 }
