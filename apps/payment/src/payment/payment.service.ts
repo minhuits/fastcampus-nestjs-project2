@@ -1,4 +1,5 @@
-import { NOTIFICATION_SERVICE, NotificationMicroservice } from '@app/common';
+import { constructMetadata, NOTIFICATION_SERVICE, NotificationMicroservice } from '@app/common';
+import { Metadata } from '@grpc/grpc-js';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,7 +25,7 @@ export class PaymentService implements OnModuleInit {
     );
   }
 
-  async makePayment(payload: MakePaymentDto) {
+  async makePayment(payload: MakePaymentDto, metadata: Metadata) {
     let paymentId;
 
     try {
@@ -36,7 +37,7 @@ export class PaymentService implements OnModuleInit {
 
       await this.updatePaymentStatus(result.id, PaymentStatus.approved);
 
-      this.sendNotification(payload.orderId, payload.userEmail);
+      this.sendNotification(payload.orderId, payload.userEmail, metadata);
 
       return this.paymentRepository.findOneBy({ id: result.id });
     } catch (e) {
@@ -61,12 +62,10 @@ export class PaymentService implements OnModuleInit {
     });
   }
 
-  async sendNotification(orderId: string, to: string) {
-    const resp = await lastValueFrom(
-      this.notificationService.sendPaymentNotification({
-        to,
-        orderId,
-      })
-    );
+  async sendNotification(orderId: string, to: string, metadata: Metadata) {
+    const resp = await lastValueFrom(this.notificationService.sendPaymentNotification({
+      to,
+      orderId,
+    }, constructMetadata(PaymentService.name, 'sendNotification', metadata)))
   }
 }

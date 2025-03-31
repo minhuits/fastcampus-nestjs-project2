@@ -1,9 +1,10 @@
-import { UserMicroservice } from '@app/common';
-import { BadRequestException, Controller, UnauthorizedException } from '@nestjs/common';
+import { GrpcInterceptor, UserMicroservice } from '@app/common';
+import { BadRequestException, Controller, UnauthorizedException, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 @UserMicroservice.AuthServiceControllerMethods()
+@UseInterceptors(GrpcInterceptor)
 export class AuthController implements UserMicroservice.AuthServiceController {
   constructor(private readonly authService: AuthService) { }
 
@@ -13,7 +14,7 @@ export class AuthController implements UserMicroservice.AuthServiceController {
 
   async registerUser(request: UserMicroservice.RegisterUserRequest) {
     const { token } = request;
-    
+
     const tokenData = await this.authService.register(token, request);
 
     // null 체크 추가
