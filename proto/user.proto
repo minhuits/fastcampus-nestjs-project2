@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package user;
+
+service AuthService {
+  rpc ParseBearerToken(ParseBearerTokeRequest) returns (ParseBearerTokeResponse);
+  rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse);
+}
+
+message ParseBearerTokeRequest {
+  string token = 1;
+}
+
+message ParseBearerTokeResponse {
+  string sub = 1;
+}
+
+message RegisterUserRequest {
+  string token = 1;
+  string name = 2;
+  int32 age = 3;
+  string profile = 4;
+}
+
+message RegisterUserResponse {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  int32 age = 4;
+  string profile = 5;
+}
+
+message LoginUserRequest {
+  string token = 1;
+}
+
+message LoginUserResponse {
+  string refreshToken = 1;
+  string accessToken = 2;
+}
+
+service UserService {
+  rpc GetUserInfo(GetUserRequest) returns (GetUserResponse);
+}
+
+message GetUserRequest {
+  string userId = 1;
+}
+message GetUserResponse {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  int32 age = 4;
+  string profile = 5;
+}
