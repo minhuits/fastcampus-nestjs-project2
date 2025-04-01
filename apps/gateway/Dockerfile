@@ -28,7 +28,6 @@ CMD ["pnpm", "start:dev", "gateway"]
 
 FROM node:alpine AS production
 
-# env 환경 변수 설정
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
